@@ -21,7 +21,6 @@ class Protutor(unittest.TestCase):
 		psw.send_keys("123")
 		login = driver.find_element_by_xpath("//*[@id='form-modal-loginForm']//button")
 		login.click()
-		driver.quit()
 
 
 	def test_LoginUser(self):
@@ -36,10 +35,9 @@ class Protutor(unittest.TestCase):
 		psw.send_keys("123")
 		login = driver.find_element_by_xpath("//*[@id='form-modal-loginForm']//button")
 		login.click()
-		driver.quit()
 
 
-	def TearDown(self):
+	def tearDown(self):
 		self.driver.quit()
 
 
