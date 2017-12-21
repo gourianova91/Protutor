@@ -1,46 +1,55 @@
-import unittest
-import time
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
+from BasePage                import BasePage
+from BasePage                import IncorrectPageException
+from UIMap                   import LoginPageMap
 
-class Protutor(unittest.TestCase):
+class LoginPage(BasePage):
 
-	def setUp(self):
-		self.driver = webdriver.Chrome()
-		self.driver.maximize_window()
+    def __init__(self, driver):
+        super(LoginPage, self).__init__(driver)
+  
 
-	def test_LoginTutor(self):
-		driver = self.driver
-		driver.get("http://admin:AdminTut432@www.protutor-dev.com/")
-		element = driver.find_element_by_xpath("//*[@id='navbar']/ul[2]/noindex[1]/a")
-		element.click()
-		time.sleep(0.5)
-		email = driver.find_element_by_xpath("//*[@id='form-modal-loginForm']/div[1]/input[1]")
-		psw = driver.find_element_by_xpath("//*[@id='form-modal-loginForm']/div[1]/input[2]")
-		email.send_keys("12345@mailinator.com")
-		psw.send_keys("123")
-		login = driver.find_element_by_xpath("//*[@id='form-modal-loginForm']//button")
-		login.click()
+    def _verify_page(self):
+        try:
+            self.wait_for_element_visibility(10, 
+                                           "xpath", 
+                                           LoginPageMap['LoginButtonXpath']
+            )
+        except:   
+            raise IncorrectPageException
+
+    def login_button_click(self):
+        self.click(10, 
+            "xpath", 
+             LoginPageMap['LoginButtonXpath']
+        )
+    
+    def login_tutor(self):
+        self.fill_out_field("xpath", 
+                            LoginPageMap["EmailFieldXpath"], 
+                            "12345@mailinator.com"
+        )
+        self.fill_out_field("xpath", 
+                            LoginPageMap['PasswordFieldXpath'], 
+                            "123"
+        )
+        self.click(10, 
+                   "xpath", 
+                   LoginPageMap['SubmitButtonXpath']
+        )
+
+    def login_user(self):
+        self.fill_out_field("xpath", 
+                            LoginPageMap["EmailFieldXpath"], 
+                            "222@mailinator.com"
+        )
+        self.fill_out_field("xpath", 
+                            LoginPageMap['PasswordFieldXpath'], 
+                            "123"
+        )
+        self.click(10, 
+                   "xpath", 
+                   LoginPageMap['SubmitButtonXpath']
+        )
 
 
-	def test_LoginUser(self):
-		driver = self.driver
-		driver.get("http://admin:AdminTut432@www.protutor-dev.com/")
-		element = driver.find_element_by_xpath("//*[@id='navbar']/ul[2]/noindex[1]/a")
-		element.click()
-		time.sleep(0.5)
-		email = driver.find_element_by_xpath("//*[@id='form-modal-loginForm']/div[1]/input[1]")
-		psw = driver.find_element_by_xpath("//*[@id='form-modal-loginForm']/div[1]/input[2]")
-		email.send_keys("222@mailinator.com")
-		psw.send_keys("123")
-		login = driver.find_element_by_xpath("//*[@id='form-modal-loginForm']//button")
-		login.click()
 
-
-	def tearDown(self):
-		self.driver.quit()
-
-
-
-if __name__ == "__main__":
-    unittest.main()
